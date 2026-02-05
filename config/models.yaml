@@ -1,0 +1,137 @@
+# CoT-Evo Model Registry Configuration
+# This file defines all models used in the CoT-Evo framework
+# IMPORTANT: Replace the placeholder values below with your actual API credentials
+
+models:
+  # ============================================================================
+  # Thinker Models (Teachers)
+  # ============================================================================
+  # Add as many thinker models as you need. Each model requires:
+  # - name: A unique identifier to reference this model in the code
+  # - base_url: The API endpoint URL
+  # - api_key: Your API key for this model
+  # - model_name: The actual model name to use in API calls (e.g., "deepseek-r1", "gpt-4o")
+  # Note: name and model_name can be different, but model_name must match what the API expects
+  # ============================================================================
+  thinkers:
+    - name: "deepseek-r1"
+      provider: "openai"
+      base_url: "https://api.ai-gaochao.cn/v1"
+      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      model_name: "deepseek-r1"
+      description: "DeepSeek-R1 reasoning model"
+      capabilities:
+        reasoning: true
+        function_calling: false
+      temperature: 0.7
+      max_tokens: 16384
+
+    - name: "qwen-235b"
+      provider: "openai"
+      base_url: "https://api.ai-gaochao.cn/v1"
+      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      model_name: "qwen3-235b-a22b-thinking-2507"
+      description: "Qwen3-235B-A22B thinking model"
+      capabilities:
+        reasoning: true
+        function_calling: false
+      temperature: 0.7
+      max_tokens: 16384
+
+    - name: "gemini-3-pro"
+      provider: "openai"
+      base_url: "https://api.ai-gaochao.cn/v1"
+      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      model_name: "gemini-3-pro-preview-thinking"
+      description: "Gemini-3-Pro reasoning model"
+      capabilities:
+        reasoning: true
+        function_calling: false
+      temperature: 0.7
+      max_tokens: 16384
+
+    # - name: "kimi-k25"
+    #   provider: "openai"
+    #   base_url: "https://api.ai-gaochao.cn/v1"
+    #   api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    #   model_name: "kimi-k2.5"
+    #   description: "Kimi-K2.5 reasoning model"
+    #   capabilities:
+    #     reasoning: true
+    #     function_calling: false
+    #   temperature: 0.7
+    #   max_tokens: 16384
+
+  # ============================================================================
+  # Embedding Model (for behavior embeddings in NSLC selection)
+  # ============================================================================
+  embedding:
+    name: "text-embedding-3-large"
+    provider: "openai"
+    base_url: "https://api.ai-gaochao.cn/v1"
+    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    model_name: "text-embedding-3-large"
+    embedding_dim: 3072
+    batch_size: 10
+
+  # ============================================================================
+  # Judge Model (LLM-as-a-Judge for knowledge usage evaluation)
+  # ============================================================================
+  judge:
+    name: "gpt-4o"
+    provider: "openai"
+    base_url: "https://api.ai-gaochao.cn/v1"
+    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    model_name: "gpt-4o"
+    temperature: 0.1  # Low temperature for consistent evaluation
+    max_tokens: 4096
+
+  # ============================================================================
+  # Knowledge Generation Model (for generating knowledge from answers)
+  # ============================================================================
+  knowledge_generator:
+    name: "gpt-4o-knowledge"
+    provider: "openai"
+    base_url: "https://api.ai-gaochao.cn/v1"
+    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    model_name: "gpt-4o"
+    temperature: 0.5
+    max_tokens: 4096
+
+  # ============================================================================
+  # Global Operator Model (Optional - Mode B)
+  # ============================================================================
+  # If specified, this model will be used for all crossover/mutation operations
+  # If null, the system will automatically use the original generator model (Mode A)
+  # To enable Mode B, uncomment the line below and set it to one of the thinker names
+  global_operator: null
+  # global_operator: "kimi-k25"  # Example: use Kimi-K2.5 for all operations
+
+# ============================================================================
+# Provider-Specific Settings
+# ============================================================================
+provider_settings:
+  openai:
+    timeout: 120  # seconds
+    max_retries: 3
+    retry_delay: 1  # seconds
+
+  vllm:
+    timeout: 120
+    max_retries: 3
+    retry_delay: 1
+
+# ============================================================================
+# Model Selection Strategy
+# ============================================================================
+selection_strategy:
+  # How to select thinker models for initialization
+  # - "random": Randomly select from available thinkers
+  # - "round_robin": Cycle through thinkers in order
+  # - "weighted": Weight by model capabilities (prefer reasoning models)
+  initialization: "round_robin"
+
+  # How to select operator models for crossover/mutation
+  # - "auto": Use the original generator model (Mode A)
+  # - "global": Use the global_operator model (Mode B)
+  operation: "auto"

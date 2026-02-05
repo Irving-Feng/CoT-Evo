@@ -1,0 +1,163 @@
+# CoT-Evo Default Configuration
+# This file contains default hyperparameters for the evolutionary algorithm
+
+# ============================================================================
+# Population Configuration
+# ============================================================================
+population:
+  initial_size: 6               # Total initial population size (matches POPULATION_SIZE in .env)
+  vanilla_ratio: 0.666          # Ratio of vanilla-generated CoTs (formula 1) - 2/3
+  knowledge_augmented_ratio: 0.334  # Ratio of knowledge-augmented CoTs (formula 2) - 1/3
+  max_size: 6                   # Maximum population size (replaces lowest fitness)
+
+# ============================================================================
+# Fitness Function Configuration
+# ============================================================================
+fitness:
+  # Weight for length appropriateness score (lambda_1 in formula 6)
+  lambda_length: 0.3
+
+  # Weight for knowledge usage correctness score (lambda_2 in formula 6)
+  lambda_knowledge: 0.5
+
+  # Length percentile thresholds (formula 4)
+  # These should be computed from your dataset using scripts/analyze_stats.py
+  length_percentiles:
+    lower: 1500   # 15% percentile (in tokens)
+    upper: 5000   # 85% percentile (in tokens)
+
+# ============================================================================
+# Selection Configuration (NSLC Algorithm)
+# ============================================================================
+selection:
+  # Number of nearest neighbors for novelty and local competition (k in formulas 8-9)
+  n_neighbors: 3  # Matches N_NEIGHBORS in .env
+
+  # Small constant for numerical stability (epsilon in formula 11)
+  epsilon: 0.1  # Matches EPSILON in .env
+
+  # Embedding model configuration (configured in models.yaml)
+  embedding:
+    model_name: "text-embedding-3-large"  # Should match models.yaml embedding.model_name
+    embedding_dim: 3072  # Should match models.yaml embedding.embedding_dim
+
+# ============================================================================
+# Variation Configuration
+# ============================================================================
+variation:
+  # Crossover probability (matches CROSSOVER_RATE in .env)
+  crossover_rate: 0.7
+
+  # Mutation probability (matches MUTATION_RATE in .env)
+  mutation_rate: 0.3
+
+  # Mutation mode probabilities (must sum to 1.0)
+  mutation_modes:
+    add: 0.4      # Additive mutation (formula 12)
+    delete: 0.3   # Deletive mutation (formula 13)
+    innovate: 0.3 # Innovative mutation (formula 14)
+
+# ============================================================================
+# Optimization Configuration
+# ============================================================================
+optimization:
+  # Maximum number of generations
+  max_generations: 5
+
+  # Convergence patience (stop if no improvement for N generations)
+  convergence_patience: 2
+
+  # Minimum fitness improvement threshold
+  convergence_threshold: 0.01
+
+  # Checkpoint saving interval (in generations)
+  checkpoint_interval: 1
+
+# ============================================================================
+# Knowledge Augmentation Configuration
+# ============================================================================
+knowledge:
+  # Knowledge augmentation mode: "hybrid", "rag_only", "generation_only"
+  mode: "hybrid"
+
+  # RAG configuration
+  rag:
+    enabled: true
+    top_k: 3              # Number of documents to retrieve
+    similarity_threshold: 0.7  # Minimum similarity score
+    knowledge_base_path: "./data/knowledge_base/"  # Matches KNOWLEDGE_BASE_PATH in .env
+
+  # Generation configuration (uses knowledge_generator model from models.yaml)
+  generation:
+    enabled: true
+    model_name: "gpt-4o"  # Should match models.yaml knowledge_generator.model_name
+
+# ============================================================================
+# Model Selection Configuration
+# ============================================================================
+model_selection:
+  # Operator model mode: "auto" (Mode A) or "global" (Mode B)
+  # - "auto": Use the original generator model for each trajectory
+  # - "global": Use a globally specified operator model
+  mode: "auto"
+
+  # Global operator model name (only used if mode is "global")
+  global_operator_model: null  # e.g., "qwen-plus"
+
+# ============================================================================
+# Parallel Processing Configuration
+# ============================================================================
+parallel:
+  # Maximum concurrent LLM requests (matches MAX_CONCURRENT_REQUESTS in .env)
+  max_concurrent_requests: 100
+
+  # Batch size for data-level parallelism (matches BATCH_SIZE in .env)
+  batch_size: 20
+
+  # Enable operation-level parallelism during initialization
+  enable_init_parallel: true
+
+  # Disable operation-level parallelism during variation (due to causal dependencies)
+  enable_variation_parallel: false
+
+# ============================================================================
+# Caching Configuration
+# ============================================================================
+cache:
+  enabled: true  # Matches ENABLE_CACHE in .env
+  directory: "./cache"  # Matches CACHE_DIR in .env
+  persist_to_disk: true
+
+  # What to cache
+  cache_embeddings: true
+  cache_knowledge: true
+  cache_evaluations: false  # Usually not needed to cache evaluations
+
+# ============================================================================
+# Logging Configuration
+# ============================================================================
+logging:
+  level: "INFO"  # Matches LOG_LEVEL in .env: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "./logs/cot_evo.log"  # Matches LOG_FILE in .env (leave empty to log to stdout only)
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# ============================================================================
+# Output Configuration
+# ============================================================================
+output:
+  checkpoint_dir: "./outputs/checkpoints"  # Matches CHECKPOINT_DIR in .env
+  log_dir: "./outputs/logs"
+  evolved_dataset_dir: "./outputs/evolved_datasets"
+
+  # Checkpoint settings (matches ENABLE_CHECKPOINTS and CHECKPOINT_INTERVAL in .env)
+  enable_checkpoints: true
+  checkpoint_interval: 1  # Save checkpoint every N generations
+
+  # Output format for evolved datasets
+  format: "json"  # json, jsonl
+
+  # Include intermediate generations in output
+  include_intermediate: false
+
+  # Include metadata (fitness scores, generation info, etc.)
+  include_metadata: true

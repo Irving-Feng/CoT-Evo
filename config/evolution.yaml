@@ -1,0 +1,41 @@
+# CoT-Evo Evolution Engine Configuration
+# This file contains hyperparameters for the evolutionary optimization process
+
+evolution:
+  # Evolution hyperparameters
+  n_generations: 3
+  population_size: 6
+  convergence_threshold: 1.0
+  k_neighbors: 5
+
+  # Initialization parameters (can also use ratios below)
+  n_vanilla: 4
+  n_knowledge_augmented: 2
+
+  # Ratio parameters for initialization (alternative to n_vanilla/n_knowledge_augmented)
+  initial_vanilla_ratio: 0.67  # ~2/3
+  initial_knowledge_augmented_ratio: 0.33  # ~1/3
+
+  # Variation parameters
+  crossover_prob: 0.4
+  mutation_prob: 0.6
+  mutation_mode_distribution:
+    add: 0.25
+    delete: 0.25
+    innovate: 0.5
+
+  # Selection parameters
+  elitism_ratio: 0.5
+  epsilon: 0.1
+
+  # Retry and error handling
+  max_retries: 3
+  retry_backoff: 2.0
+
+  # Checkpoint
+  save_checkpoints: true
+  checkpoint_interval: 1
+
+  # Logging
+  log_level: "INFO"
+  log_generation_stats: true

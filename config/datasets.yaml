@@ -1,0 +1,174 @@
+# CoT-Evo Dataset Configuration
+# This file defines supported datasets and their evaluation configurations
+
+datasets:
+  # ============================================================================
+  # BioProBench Datasets
+  # ============================================================================
+  BioProBench:
+    name: "BioProBench"
+    description: "Biological protocol reasoning benchmark"
+    data_format: "json"
+
+    # Task types and their configurations
+    tasks:
+      ERR:
+        name: "Error Recognition"
+        evaluator: "bioprobench"
+        answer_format: "[ANSWER_START]answer[ANSWER_END]"
+        requires_exact_match: true
+
+      PQA:
+        name: "Protocol Question Answering"
+        evaluator: "bioprobench"
+        answer_format: "[ANSWER_START]answer[ANSWER_END]"
+        requires_exact_match: true
+
+      ORD:
+        name: "Ordering"
+        evaluator: "bioprobench"
+        answer_format: "[ANSWER_START]answer[ANSWER_END]"
+        requires_exact_match: true
+
+      GEN:
+        name: "Generation"
+        evaluator: "bioprobench"
+        answer_format: "[ANSWER_START]answer[ANSWER_END]"
+        requires_exact_match: false  # Use semantic similarity
+
+    # System prompt
+    system_prompt: |
+      You are a helpful assistant for answering biological protocol-related questions.
+      Given a biological query, your task is to solve it thoroughly and explicitly provide the final result.
+      You should output the final answer in the last line of your response using the default format:
+      [ANSWER_START]final answer here[ANSWER_END]
+
+    # Data paths
+    train_path: "./data/BioProBench/train.json"
+    test_path: "./data/BioProBench/test.json"
+
+    # Length percentiles (compute using scripts/analyze_stats.py)
+    length_percentiles:
+      lower: 1500
+      upper: 5000
+
+  # ============================================================================
+  # ChemCoT Datasets
+  # ============================================================================
+  ChemCoTDataset:
+    name: "ChemCoTDataset"
+    description: "Chemistry reasoning benchmark"
+    data_format: "json"
+
+    # Task types and their configurations
+    tasks:
+      mol_und:
+        name: "Molecule Understanding"
+        evaluator: "chemcot"
+        answer_format: '{"result": "answer"}'
+        requires_exact_match: true
+        use_chem_metrics: true
+
+      mol_edit:
+        name: "Molecule Editing"
+        evaluator: "chemcot"
+        answer_format: '{"result": "SMILES"}'
+        requires_exact_match: true
+        use_chem_metrics: true
+        validation_script: "eval_mol_edit.py"
+
+      mol_opt:
+        name: "Molecule Optimization"
+        evaluator: "chemcot"
+        answer_format: '{"result": "SMILES"}'
+        requires_exact_match: false  # Use molecular properties
+        use_chem_metrics: true
+
+      reaction:
+        name: "Reaction Prediction"
+        evaluator: "chemcot"
+        answer_format: '{"result": "SMILES"}'
+        requires_exact_match: true
+        use_chem_metrics: true
+
+    # System prompt
+    system_prompt: |
+      You are a helpful assistant for answering chemistry-related questions.
+      Given a chemical query, your task is to solve it thoroughly and explicitly provide the final result.
+      For tasks such as Molecule Editing, Molecule Optimization, or Reaction Prediction, you should output the final molecule in SMILES format using a JSON structure in the last line of your response.
+      The default JSON format should be used: {"result": "final SMILES or answer here"}
+
+    # Data paths
+    train_path: "./data/ChemCoTDataset/train-GA-small.json"
+    test_path: "./data/ChemCoTDataset/test.json"
+
+    # Oracle data for molecular property evaluation
+    oracle_path: "./oracle/"
+
+    # Length percentiles
+    length_percentiles:
+      lower: 1200
+      upper: 4500
+
+  # ============================================================================
+  # Generic/Custom Datasets
+  # ============================================================================
+  generic:
+    name: "Generic Dataset"
+    description: "Generic question-answering dataset"
+    data_format: "json"
+
+    # Generic task configuration
+    tasks:
+      default:
+        name: "Default QA"
+        evaluator: "generic"
+        answer_format: "free_text"
+        requires_exact_match: false
+        use_semantic_similarity: true
+
+    # System prompt (should be customized)
+    system_prompt: |
+      You are a helpful assistant for answering scientific questions.
+      Given a query, your task is to solve it thoroughly and explicitly provide the final result.
+
+    # Data paths (should be customized)
+    train_path: "./data/generic/train.json"
+    test_path: "./data/generic/test.json"
+
+    # Length percentiles (should be computed)
+    length_percentiles:
+      lower: 1000
+      upper: 4000
+
+# ============================================================================
+# Evaluation Settings
+# ============================================================================
+evaluation:
+  # Whether to use LLM-as-a-Judge for knowledge usage correctness
+  use_knowledge_judge: true
+
+  # Whether to compute semantic similarity for non-exact-match tasks
+  use_semantic_similarity: true
+
+  # Semantic similarity model
+  similarity_model: "text-embedding-3-small"
+
+  # Similarity threshold for considering answers as "correct"
+  similarity_threshold: 0.85
+
+# ============================================================================
+# Data Processing Settings
+# ============================================================================
+data_processing:
+  # Maximum number of samples to process (null for all)
+  max_samples: null
+
+  # Random seed for reproducibility
+  random_seed: 42
+
+  # Shuffle data before processing
+  shuffle: true
+
+  # Validation split ratio
+  validation_split: 0.1

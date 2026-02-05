@@ -16,8 +16,8 @@ models:
   thinkers:
     - name: "deepseek-r1"
       provider: "openai"
-      base_url: "https://api.ai-gaochao.cn/v1"
-      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      base_url: "BASE_URL"
+      api_key: "API_KEY"
       model_name: "deepseek-r1"
       description: "DeepSeek-R1 reasoning model"
       capabilities:
@@ -28,8 +28,8 @@ models:
 
     - name: "qwen-235b"
       provider: "openai"
-      base_url: "https://api.ai-gaochao.cn/v1"
-      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      base_url: "BASE_URL"
+      api_key: "API_KEY"
       model_name: "qwen3-235b-a22b-thinking-2507"
       description: "Qwen3-235B-A22B thinking model"
       capabilities:
@@ -40,8 +40,8 @@ models:
 
     - name: "gemini-3-pro"
       provider: "openai"
-      base_url: "https://api.ai-gaochao.cn/v1"
-      api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+      base_url: "BASE_URL"
+      api_key: "API_KEY"
       model_name: "gemini-3-pro-preview-thinking"
       description: "Gemini-3-Pro reasoning model"
       capabilities:
@@ -50,26 +50,14 @@ models:
       temperature: 0.7
       max_tokens: 16384
 
-    # - name: "kimi-k25"
-    #   provider: "openai"
-    #   base_url: "https://api.ai-gaochao.cn/v1"
-    #   api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
-    #   model_name: "kimi-k2.5"
-    #   description: "Kimi-K2.5 reasoning model"
-    #   capabilities:
-    #     reasoning: true
-    #     function_calling: false
-    #   temperature: 0.7
-    #   max_tokens: 16384
-
   # ============================================================================
   # Embedding Model (for behavior embeddings in NSLC selection)
   # ============================================================================
   embedding:
     name: "text-embedding-3-large"
     provider: "openai"
-    base_url: "https://api.ai-gaochao.cn/v1"
-    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    base_url: "BASE_URL"
+    api_key: "API_KEY"
     model_name: "text-embedding-3-large"
     embedding_dim: 3072
     batch_size: 10
@@ -80,8 +68,8 @@ models:
   judge:
     name: "gpt-4o"
     provider: "openai"
-    base_url: "https://api.ai-gaochao.cn/v1"
-    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    base_url: "BASE_URL"
+    api_key: "API_KEY"
     model_name: "gpt-4o"
     temperature: 0.1  # Low temperature for consistent evaluation
     max_tokens: 4096
@@ -92,8 +80,8 @@ models:
   knowledge_generator:
     name: "gpt-4o-knowledge"
     provider: "openai"
-    base_url: "https://api.ai-gaochao.cn/v1"
-    api_key: "sk-Ar8v1VJWYLSSUvGv7aBc9c538f70479e8d280631B0397435"
+    base_url: "BASE_URL"
+    api_key: "API_KEY"
     model_name: "gpt-4o"
     temperature: 0.5
     max_tokens: 4096

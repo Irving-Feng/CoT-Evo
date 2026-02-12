@@ -1,12 +1,21 @@
 # CoT-Evo: Evolutionary Distillation of Chain-of-Thought for Scientific Reasoning
 
-A production-grade implementation of the CoT-Evo framework for evolutionary Chain-of-Thought distillation in scientific reasoning tasks.
+[![arXiv](https://img.shields.io/badge/arXiv-2510.13166-b31b1b.svg)](https://arxiv.org/abs/2510.13166)
 
-## 🎯 Project Overview
+Official implementation of "[CoT-Evo: Evolutionary Distillation of Chain-of-Thought for Scientific Reasoning](https://arxiv.org/abs/2510.13166)"
+
+![](fig/overview.png)
+
+## Updates
+
+* [2026/02/12] 🚨 We've released our complete demo code.
+* [2026/01/26] 🎉 Our work has been accepted by **ICLR 2026**!
+
+## 🎯 Overview
 
 CoT-Evo is a novel evolutionary framework that generates high-fidelity, compact Chain-of-Thought (CoT) data for scientific reasoning by leveraging multiple teacher models and iterative refinement through novelty-driven selection and reflective variation.
 
-### Key Features
+#### Key Features
 
 - **🧠 Multi-Thinker Initialization**: Leverages diverse reasoning models with different prompting strategies
 - **🔍 Novelty-Driven Selection**: Implements NSLC (Novelty Search with Local Competition) algorithm
@@ -232,31 +241,6 @@ Simply add more entries to the `thinkers` list. CoT-Evo will automatically use a
 - `k_neighbors`: Number of neighbors for NSLC selection
 - `epsilon`: Small constant to prevent division by zero in NSLC
 
-## 📖 Algorithm Overview
-
-CoT-Evo implements the following evolutionary loop:
-
-1. **Multi-Thinker Initialization** (Formula 1-2):
-   - Generate diverse CoTs using multiple teacher models
-   - Augment some with domain knowledge
-
-2. **Fitness Evaluation** (Formula 3-6):
-   - Exact match: Binary correctness
-   - Length appropriateness: Penalizes too short/long reasoning
-   - Knowledge usage: Assesses domain knowledge correctness
-
-3. **Novelty-Driven Selection** (Formula 7-11):
-   - Compute behavioral embeddings using embedding model
-   - Apply NSLC: Pareto selection on novelty + local competition
-
-4. **Reflective Variation** (Section 2.4):
-   - **Crossover**: Recombine reasoning chains (for incorrect answers only)
-   - **Mutation**: Add/Delete/Innovate operations
-
-5. **Replacement**: Merge offspring with parents, keep top performers
-
-6. **Early Stopping**: Stop when fitness >= convergence_threshold
-
 ## 🧪 Supported Datasets
 
 Currently supported datasets (registered in `config/datasets.yaml`):
@@ -339,10 +323,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📝 Citation
 
 ```bibtex
-@article{cot-evo-2025,
+@article{feng2025cot,
   title={CoT-Evo: Evolutionary Distillation of Chain-of-Thought for Scientific Reasoning},
-  author={...},
-  journal={...},
+  author={Feng, Kehua and Ding, Keyan and Zhu, Zhihui and Liang, Lei and Zhang, Qiang and Chen, Huajun},
+  journal={arXiv preprint arXiv:2510.13166},
   year={2025}
 }
 ```
